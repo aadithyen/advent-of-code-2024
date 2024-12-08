@@ -10,11 +10,39 @@ pub type Numbers =
 pub fn main() {
   let assert Ok(records) = simplifile.read(from: "./input.txt")
 
-  splitlocations(records)
+  io.println("distance")
+  records
+  |> splitlocations
   |> sort
   |> linedistance
   |> list.fold(0, int.add)
   |> io.debug
+
+  io.println("similarity")
+  records
+  |> splitlocations
+  |> similarity
+  |> io.debug
+}
+
+// Calculate similarity
+fn similarity(numbers: Numbers) -> Int {
+  similarityloop(numbers, 0)
+}
+
+fn similarityloop(numbers: Numbers, accumulator: Int) -> Int {
+  case numbers.0 {
+    [x, ..rest] ->
+      similarityloop(
+        #(rest, numbers.1),
+        accumulator + individual_score(numbers.1, x),
+      )
+    [] -> accumulator
+  }
+}
+
+fn individual_score(locs2: List(Int), num1: Int) -> Int {
+  num1 * list.count(locs2, fn(x) -> Bool { x == num1 })
 }
 
 // Calculate distance
